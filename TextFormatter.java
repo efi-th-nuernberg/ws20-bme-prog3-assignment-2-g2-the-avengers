@@ -12,7 +12,14 @@ class TextFormatter {
 
     public static void main(String[] args) {
         TextFormatter formatter = new TextFormatter(40);
+        System.out.println("");
+        System.out.println("Linksbündig:");
+        System.out.println("");
         formatter.print(text,0);
+        System.out.println("");
+        System.out.println("Rechtsbündig:");
+        System.out.println("");
+        formatter.print(text,1);
         // ENTER 0 for left formatted, 1 for right formatted
     } 
 
@@ -28,9 +35,7 @@ class TextFormatter {
       return spaces;
     }
     public void print(String aText,int format) {
-
       final int LIMIT_BACK = 14;
-      
         int lineLengthCounter = 0;
         while (true) {
             if (lineLengthCounter < aText.length()) {
@@ -50,8 +55,7 @@ class TextFormatter {
                 break;
             }
         }
-
         System.out.println(addSpaces((lineLength-aText.length())*format)+aText.substring(1, aText.length()));
     }
-    // test
+    
 }
