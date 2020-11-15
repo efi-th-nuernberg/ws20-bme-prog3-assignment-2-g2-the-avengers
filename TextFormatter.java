@@ -1,57 +1,96 @@
+import java.util.*;
+
 class TextFormatter {
 
-    int lineLength;
+  int lineLength;
+  
+  private static final String text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy " +
+          "eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et " +
+          "accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem " +
+          "ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod " +
+          "tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et " +
+          "justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est " +
+          "Lorem ipsum dolor sit amet.";
 
-    private static final String text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy " +
-        "eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et " +
-        "accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem " +
-        "ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod " +
-        "tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et " +
-        "justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. " +
-        "Lorem ipsum dolor sit amet.";
+  public static void main(String[] args) {
+    TextFormatter formatter = new TextFormatter(30);
+    System.out.println("");
+        System.out.println("Linksbündig:");
+        System.out.println("");
+        formatter.formatLeft(text);
+        System.out.println("");
+        System.out.println("Rechtsbündig:");
+        System.out.println("");
+        formatter.formatRight(text);
+    
+    
+  }
 
-    public static void main(String[] args) {
-        TextFormatter formatter = new TextFormatter(40);
-        formatter.print(text,0);
-        // ENTER 0 for left formatted, 1 for right formatted
-    } 
+  public TextFormatter(int lineLength) {
+    this.lineLength = lineLength;
+  }
 
-    public TextFormatter(int maxLineLength) {
-        lineLength = maxLineLength;
-    }
 
-    public String addSpaces(int maxSpaces){
-      String spaces = "";
-      for (int i = 0; i< maxSpaces; i++){
-          spaces += " ";
-      }
-      return spaces;
-    }
-    public void print(String aText,int format) {
+  public void formatLeft(String text) {
 
-      final int LIMIT_BACK = 14;
-      
-        int lineLengthCounter = 0;
-        while (true) {
-            if (lineLengthCounter < aText.length()) {
-                for (int lastSpaceChar = 0; lastSpaceChar < LIMIT_BACK; lastSpaceChar++) {
-                    if ((lineLengthCounter == lineLength - lastSpaceChar) && (aText.charAt(lineLength - lastSpaceChar) == ' ')) {
-                        if (aText.charAt(0) == ' ') {
-                            System.out.println(addSpaces(lastSpaceChar*format)+ aText.substring(1, lineLengthCounter));
-                        } else {
-                            System.out.println(addSpaces(lastSpaceChar*format)+aText.substring(0, lineLengthCounter));
-                        }
-                        aText = aText.substring(lineLengthCounter, aText.length());
-                        lineLengthCounter = 0;
-                    }
-                }
-                lineLengthCounter++;
-            } else {
-                break;
-            }
+		String currentLine = "";
+    List<String> words = tokenize(text);
+    
+    // print each line
+		for(int i =0; i < words.size(); i++)
+      {
+		    if (currentLine.length() + words.get(i).length() < lineLength) 
+        {
+				currentLine += words.get(i) + " ";
+        } 
+        else {
+        System.out.println(currentLine);
+				currentLine = words.get(i) + " ";
         }
+		}
+    //print last line
+    System.out.println(currentLine); 
+	}
 
-        System.out.println(addSpaces((lineLength-aText.length())*format)+aText.substring(1, aText.length()));
+
+  public void formatRight(String text) {
+		String currentLine = "";
+    List<String> words = tokenize(text);
+    
+		for(int count =0; count < words.size(); count++)
+      {
+		    if (currentLine.length() + words.get(count).length() < 30) 
+        {
+			currentLine += words.get(count) + " ";
+        } 
+        else {
+          addSpaces(currentLine);
+        currentLine = words.get(count) + " ";
+        }
+		}
+    addSpaces(currentLine); 
+	}
+
+  private List<String>  tokenize(String text){
+
+  StringTokenizer toki = new StringTokenizer(text, " ");
+  List<String> words = new ArrayList<String>();
+
+		while (toki.hasMoreTokens()) {
+      words.add(toki.nextToken());
     }
-    // test
+
+
+return words;
+  }
+  private void addSpaces(String line){
+    int diff = lineLength - line.length();
+    int counter = 0;
+          while (counter != diff) 
+          {
+            line = " " + line;
+            counter++;
+          }
+        System.out.println(line);	
+  }
 }
